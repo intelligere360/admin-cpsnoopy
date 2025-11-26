@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Catálogo CPSnoopy</title>
+    <meta name="description" content="Panel administrativo para gestionar el catálogo de CPSnoopy">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="images/admin-icon-192.png">
+    
+    <!-- Meta tags para PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2c3e50">
+</head>
+<body>
+    <!-- LOGIN PANEL -->
+    <div id="loginPanel" class="login-panel">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🔐 Panel Administrativo CPSnoopy</h1>
+                <p>Gestión de catálogo - Acceso restringido</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Usuario" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" class="login-btn">Ingresar al Panel</button>
+            </form>
+            
+            <div id="loginError" class="error-message">
+                ❌ Credenciales incorrectas
+            </div>
+            
+            <div class="login-footer">
+                <small>Soluciones "De Todo un Poco" - Solo personal autorizado</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <header class="admin-header">
+            <div class="admin-header-content">
+                <h1>⚙️ Panel Administrativo CPSnoopy</h1>
+                <div class="admin-actions">
+                    <span id="userWelcome">Bienvenido</span>
+                    <button onclick="adminAuth.logout()" class="logout-btn">Cerrar Sesión</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="admin-container">
+            <!-- Aquí va todo tu contenido administrativo existente -->
+            <div class="admin-controls">
+                <button id="addProductBtn" class="btn-primary">+ Nuevo Producto</button>
+                <button id="togglePricesBtn" class="btn-secondary">Ocultar Precios</button>
+            </div>
+
+            <div class="products-stats">
+                <div class="stat-card">
+                    <h3>Total Productos</h3>
+                    <span id="totalProducts">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Consultas Hoy</h3>
+                    <span id="todayConsultas">0</span>
+                </div>
+            </div>
+
+            <div class="products-list" id="productsList">
+                <!-- Productos cargados dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Modal para productos -->
+        <div id="productModal" class="modal">
+            <!-- Contenido del modal existente -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/admin-auth.js"></script>
+    <script src="js/admin-drive-config.js"></script>
+    <script src="js/admin-app.js"></script>
+    
+    <!-- Service Worker -->
+    <script>
+        // Registrar Service Worker con mejor manejo de errores
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./admin-sw.js')
+                .then(registration => {
+                    console.log('✅ Service Worker administrativo registrado:', registration);
+                })
+                .catch(error => {
+                    console.log('⚠️ Service Worker no registrado:', error);
+                });
+        }
+    </script>
+</body>
+</html>

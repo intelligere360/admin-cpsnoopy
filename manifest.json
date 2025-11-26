@@ -1,0 +1,22 @@
+{
+  "name": "Admin - Catálogo CPSnoopy",
+  "short_name": "Admin CPSnoopy", 
+  "description": "Panel administrativo para gestionar el catálogo de productos",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#2c3e50",
+  "theme_color": "#3498db",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./images/admin-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/admin-icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
