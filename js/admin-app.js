@@ -132,41 +132,27 @@ class AdminApp {
         try {
             console.log('🔄 Inicializando Google API...');
             
-            // Esperar a que carguen las APIs
-            if (typeof gapi === 'undefined' || typeof google === 'undefined') {
-                console.log('⏳ Esperando carga de Google APIs...');
-                await new Promise(resolve => {
-                    const checkInterval = setInterval(() => {
-                        if (typeof gapi !== 'undefined' && typeof google !== 'undefined') {
-                            clearInterval(checkInterval);
-                            resolve();
-                        }
-                    }, 100);
-                    
-                    // Timeout después de 5 segundos
-                    setTimeout(() => {
-                        clearInterval(checkInterval);
+            // Esperar a que carguen las librerías
+            await new Promise((resolve) => {
+                const checkReady = () => {
+                    if (typeof gapi !== 'undefined' && typeof google !== 'undefined') {
                         resolve();
-                    }, 5000);
-                });
-            }
-
-            // Verificar si las APIs se cargaron correctamente
-            if (typeof gapi === 'undefined' || typeof google === 'undefined') {
-                throw new Error('Google APIs no se cargaron correctamente');
-            }
+                    } else {
+                        setTimeout(checkReady, 100);
+                    }
+                };
+                checkReady();
+            });
 
             if (typeof AdminDriveAPI !== 'undefined' && AdminDriveAPI.initializeGapi) {
                 await AdminDriveAPI.initializeGapi();
+                await AdminDriveAPI.detectSharedFolder(); // 🔥 IMPORTANTE: Detectar carpeta
                 this.googleApiReady = true;
                 console.log('✅ Google Drive API lista para usar');
-            } else {
-                throw new Error('AdminDriveAPI no disponible');
             }
         } catch (error) {
-            console.error('❌ Error inicializando Google API:', error);
-            this.showNotification('⚠️ Google Drive no disponible. Usando modo local.', 'info');
-            // NO rechazar la promesa, continuar en modo local
+            console.warn('⚠️ Google API no disponible - Modo local activado');
+            this.googleApiReady = false;
         }
     }
 

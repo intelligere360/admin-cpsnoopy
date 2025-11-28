@@ -161,7 +161,7 @@ async function findOrCreateFolder(folderName) {
 /**
  * Autentica al usuario
  */
-async function authenticate() {
+/*async function authenticate() {
     if (!gapiInitialized) {
         await initializeGapi();
     }
@@ -171,7 +171,7 @@ async function authenticate() {
     }
 
     return googleAuth.currentUser.get().getAuthResponse().access_token;
-}
+} */
 
 /**
  * Obtiene el JSON de productos (desde carpeta compartida)
@@ -486,6 +486,8 @@ async function findFileId(fileName, folderId) {
  * Crea un nuevo archivo en Google Drive
  */
 async function createFile(name, folderId, blob, mimeType) {
+    const accessToken = await authenticate(); // Usar GIS
+    
     const metadata = {
         name: name,
         mimeType: mimeType,
@@ -495,8 +497,6 @@ async function createFile(name, folderId, blob, mimeType) {
     const formData = new FormData();
     formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
     formData.append('file', blob);
-
-    const accessToken = googleAuth.currentUser.get().getAuthResponse().access_token;
     
     const response = await fetch(ADMIN_DRIVE_CONFIG.apiConfig.uploadUrl + '?uploadType=multipart', {
         method: 'POST',
